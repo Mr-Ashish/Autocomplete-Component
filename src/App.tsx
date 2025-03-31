@@ -1,7 +1,8 @@
 import React from "react";
+import Autocomplete from "./components/Autocomplete";
 
 function App() {
-  return <h1>Hello, Vite + React + TypeScript!</h1>;
+  return <Autocomplete />;
 }
 
 export default App;

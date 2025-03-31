@@ -1,0 +1,21 @@
+.dropdownContainer {
+  width: 100%;
+  border: 1px solid #ccc;
+}
+
+.suggestion {
+  width: 100%;
+  padding: 10px;
+}
+
+.suggestion:hover {
+  background-color: #f0f0f0;
+  cursor: pointer;
+}
+
+.no-suggestions {
+  width: 100%;
+  padding: 10px;
+  text-align: center;
+  color: #999;
+}
