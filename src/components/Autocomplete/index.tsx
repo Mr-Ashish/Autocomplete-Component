@@ -16,14 +16,11 @@ const Autocomplete: React.FC<AutoCompleteProps> = ({ onSelect }) => {
   const [matchingPrefix, setMatchingPrefix] = useState<string>("");
   const [isInputFocused, setIsInputFocused] = useState<boolean>(true);
   const debouncedSearchTerm = useDebounce(matchingPrefix, 300);
+
   const handleInputChange = (value: string) => {
+    if (value === matchingPrefix) return;
     setMatchingPrefix(value);
   };
-
-  // removing this as it is not predictable and replaced by useClickOutside
-  // const handleInputBlur = () => {
-  //   setIsInputFocused(false);
-  // };
 
   const handleInputFocus = () => {
     setIsInputFocused(true);
@@ -65,6 +62,11 @@ const Autocomplete: React.FC<AutoCompleteProps> = ({ onSelect }) => {
         aria-controls="autocomplete-dropdown"
         aria-autocomplete="list"
       />
+      {error && (
+        <div role="alert" className="error" aria-live="polite">
+          {error.message}
+        </div>
+      )}
       <Dropdown
         id="autocomplete-dropdown"
         options={suggestions || []}

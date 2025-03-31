@@ -84,22 +84,6 @@ describe("Dropdown Component", () => {
     expect(getByText("Loading")).toBeInTheDocument();
   });
 
-  it("displays 'Error Occurred' when isError is true", () => {
-    const { getByText } = render(
-      <Dropdown
-        options={options}
-        onSelect={mockOnSelect}
-        selectedOption={null}
-        show={true}
-        matchingPrefix=""
-        isLoading={false}
-        isError={true}
-        id="dropdown"
-      />
-    );
-    expect(getByText("Error Occurred")).toBeInTheDocument();
-  });
-
   it("displays 'No suggestions available' when options are empty", () => {
     const { getByText } = render(
       <Dropdown

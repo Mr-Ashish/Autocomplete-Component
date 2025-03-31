@@ -132,7 +132,7 @@ describe("Autocomplete Component", () => {
     });
 
     const { getByText } = render(<Autocomplete onSelect={mockOnSelect} />);
-    expect(getByText("Error: Something went wrong")).toBeInTheDocument();
+    expect(getByText("Something went wrong")).toBeInTheDocument();
   });
 
   it("displays 'No suggestions available' when no suggestions are returned", async () => {

@@ -118,8 +118,9 @@ const Dropdown: React.FC<DropdownProps> = ({
     return <div className="loading">Loading</div>;
   };
 
+  // already handled in the parent component
   const renderError = () => {
-    return <div className="error">Error Occurred</div>;
+    return null;
   };
 
   const renderComponentBasedOnState = () => {

@@ -15,9 +15,11 @@ function App() {
     <div className="appContainer">
       <h1>Autocomplete Component</h1>
       <Autocomplete onSelect={handleSelect} />
-      <div className="selectedValue">
-        You have selected: {selectedOption?.text}
-      </div>
+      {selectedOption ? (
+        <div className="selectedValue">
+          You have selected: {selectedOption?.text}
+        </div>
+      ) : null}
     </div>
   );
 }

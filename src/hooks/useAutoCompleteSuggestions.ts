@@ -4,31 +4,40 @@ import { fetchSuggestions } from "../services/suggestions";
 
 type AutoCompleteError = {
   message: string;
-  error: unknown;
 };
 
-export const useAutoCompleteSuggestions = (value: string) => {
+type UseAutoCompleteSuggestionsResult = {
+  data: SingleWordOption[];
+  loading: boolean;
+  error: AutoCompleteError | null;
+};
+
+export const useAutoCompleteSuggestions = (
+  value: string
+): UseAutoCompleteSuggestionsResult => {
   const [data, setData] = useState<SingleWordOption[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<AutoCompleteError | null>(null);
 
-  const controller = new AbortController();
-  const signal = controller.signal;
-
   useEffect(() => {
+    const controller = new AbortController(); // ✅ created on each effect run
+    const signal = controller.signal;
+
     if (!value.trim()) {
       setData([]);
-      setLoading(false);
       return;
     }
     setLoading(true);
     setError(null);
     const fetchData = async () => {
       try {
-        const response = await fetchSuggestions(value);
+        const response = await fetchSuggestions(value, signal);
         setData(response);
       } catch (error) {
-        setError({ message: "Error occurred", error: error });
+        if (signal.aborted) return;
+        setError({
+          message: error instanceof Error ? error.message : "Unknown error",
+        });
       } finally {
         setLoading(false);
       }
