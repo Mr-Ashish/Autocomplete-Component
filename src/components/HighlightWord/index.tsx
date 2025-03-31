@@ -9,8 +9,8 @@ const HighlightWord: React.FC<HighlightWordProps> = ({
   matchingPrefix,
 }) => {
   if (!matchingPrefix) return text;
-  //   const completeWordRegex = new RegExp(`(${matchingPrefix})`, "i");
-  const regex = new RegExp(`\\b(${matchingPrefix})`, "i"); // Match only at the start of a word
+  const regex = new RegExp(`(${matchingPrefix})`, "i");
+  //   const regex = new RegExp(`\\b(${matchingPrefix})`, "i"); // Match only at the start of a word
   const parts = text.split(regex);
 
   return parts.map((part, i) =>

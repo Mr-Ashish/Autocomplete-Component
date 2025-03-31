@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { SingleWordOption } from "../types/autocomplete";
-import words from "../utils/sampleData.json";
+import { fetchSuggestions } from "../services/suggestions";
 
 type AutoCompleteError = {
   message: string;
@@ -16,22 +16,16 @@ export const getAutoCompleteSuggestions = (value: string) => {
   const signal = controller.signal;
 
   useEffect(() => {
-    if (!value) setData([]);
+    if (!value.trim()) {
+      setData([]);
+      setLoading(false);
+      return;
+    }
     setLoading(true);
     setError(null);
     const fetchData = async () => {
       try {
-        const response = await new Promise<SingleWordOption[]>((resolve) =>
-          setTimeout(
-            () =>
-              resolve(
-                words.filter((word: SingleWordOption) =>
-                  word.text.toLowerCase().startsWith(value.toLowerCase())
-                )
-              ),
-            300
-          )
-        );
+        const response = await fetchSuggestions(value);
         setData(response);
       } catch (error) {
         setError({ message: "Error occurred", error: error });

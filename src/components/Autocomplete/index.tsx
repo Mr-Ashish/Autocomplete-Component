@@ -55,6 +55,7 @@ const Autocomplete = (props) => {
         selectedOption={null}
         show={shouldShowSuggestions()}
         matchingPrefix={matchingPrefix}
+        isLoading={loading}
       />
     </div>
   );

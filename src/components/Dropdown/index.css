@@ -1,6 +1,9 @@
 .dropdownContainer {
   width: 100%;
   border: 1px solid #ccc;
+  max-height: 400px;
+  overflow: scroll;
+  list-style: none;
 }
 
 .suggestion {
@@ -18,4 +21,9 @@
   padding: 10px;
   text-align: center;
   color: #999;
+}
+
+.suggestion.focused {
+  background-color: #e0e0e0;
+  outline: none;
 }

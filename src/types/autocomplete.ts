@@ -1,4 +1,4 @@
 export type SingleWordOption = {
-  id: number;
+  id: string;
   text: string;
 };
