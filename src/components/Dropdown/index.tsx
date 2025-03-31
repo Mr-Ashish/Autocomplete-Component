@@ -61,7 +61,7 @@ const Dropdown: React.FC<DropdownProps> = ({
 
   useEffect(() => {
     if (focusedIndex >= 0 && optionRefs.current[focusedIndex]) {
-      optionRefs.current[focusedIndex]?.scrollIntoView({
+      optionRefs.current[focusedIndex].scrollIntoView({
         behavior: "smooth",
         block: "nearest",
       });
@@ -76,6 +76,7 @@ const Dropdown: React.FC<DropdownProps> = ({
             <div
               key={option.id}
               id={option.id}
+              data-testid={option.id}
               ref={(el) => (optionRefs.current[index] = el)} // Assign ref to each option
               className={`suggestion ${
                 selectedOption && selectedOption.id === option.id

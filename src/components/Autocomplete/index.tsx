@@ -6,7 +6,11 @@ import { getAutoCompleteSuggestions } from "../../hooks/getAutoCompleteSuggestio
 import Dropdown from "../Dropdown";
 import useDebounce from "../../hooks/useDebounce";
 
-const Autocomplete: React.FC = () => {
+export interface AutoCompleteProps {
+  onSelect: (value: SingleWordOption) => void;
+}
+
+const Autocomplete: React.FC<AutoCompleteProps> = ({ onSelect }) => {
   const [matchingPrefix, setMatchingPrefix] = useState<string>("");
   const [isInputFocused, setIsInputFocused] = useState<boolean>(true);
   const debouncedSearchTerm = useDebounce(matchingPrefix, 300);
@@ -27,6 +31,7 @@ const Autocomplete: React.FC = () => {
 
   const handleOptionSelect = (option: SingleWordOption) => {
     console.log("Selected option:", option);
+    onSelect(option);
   };
 
   const {

@@ -9,7 +9,7 @@ const config: Config = {
   moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json"],
   transformIgnorePatterns: ["node_modules", "\\.css$"],
   moduleNameMapper: {
-    "\\.(css|scss|sass)$": "<rootDir>/__mocks__/styleMock.js",
+    "\\.(css|scss|sass)$": "<rootDir>/__mocks__/styleMock.ts",
   },
   setupFilesAfterEnv: ["<rootDir>/src/test/setup.ts"],
 };

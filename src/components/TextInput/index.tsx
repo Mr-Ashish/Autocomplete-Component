@@ -1,5 +1,5 @@
 import React from "react";
-import "./index.css";
+import "./textInput.css";
 
 interface TextInputProps {
   placeholder?: string;
@@ -12,7 +12,7 @@ interface TextInputProps {
 
 const TextInput: React.FC<TextInputProps> = ({
   onChange,
-  placeholder = "search",
+  placeholder = "Start typing...",
   value,
   onFocus,
   onBlur,
@@ -33,7 +33,7 @@ const TextInput: React.FC<TextInputProps> = ({
       placeholder={placeholder}
       onFocus={onFocus}
       onBlur={onBlur}
-      aria-label={placeholder} // Add ARIA label for accessibility
+      aria-label={placeholder}
     />
   );
 };
