@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  render,
-  fireEvent,
-  waitFor,
-  getByTestId,
-} from "@testing-library/react";
+import { render, fireEvent, waitFor } from "@testing-library/react";
 import Autocomplete from "./index";
 import { useAutoCompleteSuggestions } from "../../hooks/useAutoCompleteSuggestions";
 

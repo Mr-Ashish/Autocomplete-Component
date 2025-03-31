@@ -58,7 +58,7 @@ This project is a lightweight Autocomplete component developed with React and Ty
    ```
 
 6. Navigate to the port specified
-   `https://localhost:3002`
+   `http://localhost:3002`
 
 ---
 

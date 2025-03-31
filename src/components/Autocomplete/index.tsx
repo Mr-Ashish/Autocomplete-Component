@@ -20,7 +20,7 @@ const Autocomplete: React.FC<AutoCompleteProps> = ({ onSelect }) => {
     setMatchingPrefix(value);
   };
 
-  // removing this as it is not predictable
+  // removing this as it is not predictable and replaced by useClickOutside
   // const handleInputBlur = () => {
   //   setIsInputFocused(false);
   // };
@@ -65,11 +65,6 @@ const Autocomplete: React.FC<AutoCompleteProps> = ({ onSelect }) => {
         aria-controls="autocomplete-dropdown"
         aria-autocomplete="list"
       />
-      {error && (
-        <div role="alert" aria-live="polite" className="error">
-          Error: {error.message}
-        </div>
-      )}
       <Dropdown
         id="autocomplete-dropdown"
         options={suggestions || []}
