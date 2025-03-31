@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import TextInput from "../TextInput";
 import { SingleWordOption } from "../../types/autocomplete";
 import "./index.css";
 import { getAutoCompleteSuggestions } from "../../hooks/getAutoCompleteSuggestions";
 import Dropdown from "../Dropdown";
+import useDebounce from "../../hooks/useDebounce";
 
-const Autocomplete = (props) => {
-  // const [suggestions, setSuggestions] = useState<SingleWordOption[]>([]);
+const Autocomplete: React.FC = () => {
   const [matchingPrefix, setMatchingPrefix] = useState<string>("");
   const [isInputFocused, setIsInputFocused] = useState<boolean>(true);
-
+  const debouncedSearchTerm = useDebounce(matchingPrefix, 300);
   const handleInputChange = (value: string) => {
     setMatchingPrefix(value);
   };
@@ -33,29 +33,33 @@ const Autocomplete = (props) => {
     data: suggestions,
     loading,
     error,
-  } = getAutoCompleteSuggestions(matchingPrefix);
-
-  useEffect(() => {
-    console.log("----here", { matchingPrefix, suggestions, loading, error });
-  }, [matchingPrefix, suggestions, loading, error]);
+  } = getAutoCompleteSuggestions(debouncedSearchTerm);
 
   return (
-    <div className="autocompleteContainer">
+    <div
+      className="autocompleteContainer"
+      role="combobox"
+      aria-expanded={shouldShowSuggestions()}
+      aria-owns="autocomplete-dropdown"
+      aria-haspopup="listbox"
+    >
       <TextInput
         onChange={handleInputChange}
-        // value={matchingPrefix}
+        value={matchingPrefix}
         onBlur={handleInputBlur}
         onFocus={handleInputFocus}
+        aria-controls="autocomplete-dropdown"
       />
-      {/* {loading && <div className="loading">Loading...</div>} */}
       {error && <div className="error">Error: {error.message}</div>}
       <Dropdown
+        id="autocomplete-dropdown"
         options={suggestions}
         onSelect={handleOptionSelect}
         selectedOption={null}
         show={shouldShowSuggestions()}
         matchingPrefix={matchingPrefix}
         isLoading={loading}
+        isError={error !== null}
       />
     </div>
   );

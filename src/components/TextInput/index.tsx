@@ -1,49 +1,39 @@
 import React from "react";
-import { debounceWrapper } from "../../utils/app.utils";
 import "./index.css";
 
 interface TextInputProps {
   placeholder?: string;
   onChange: (e: string) => void;
-  // value: string;
-  onFocus?: () => void;
+  value: string;
+  onFocus?: (e: React.FocusEvent<HTMLInputElement>) => void;
   onBlur?: () => void;
+  className?: string;
 }
 
 const TextInput: React.FC<TextInputProps> = ({
   onChange,
   placeholder = "search",
-  // value,
+  value,
   onFocus,
   onBlur,
+  className,
 }) => {
-  const handleInputChangeDebounced = debounceWrapper(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      onChange(e.target.value);
-    },
-    300
-  );
-
-  const handleInputFocus = () => {
-    if (onFocus) {
-      onFocus();
-    }
-  };
-  const handleInputBlur = () => {
-    if (onBlur) {
-      onBlur();
-    }
+  const handleInputChangeDebounced = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    onChange(e.target.value);
   };
 
   return (
     <input
-      className="textInput"
+      className={`textInput ${className || ""}`}
       type="text"
-      // value={value}
+      value={value}
       onChange={handleInputChangeDebounced}
       placeholder={placeholder}
-      onFocus={handleInputFocus}
-      onBlur={handleInputBlur}
+      onFocus={onFocus}
+      onBlur={onBlur}
+      aria-label={placeholder} // Add ARIA label for accessibility
     />
   );
 };

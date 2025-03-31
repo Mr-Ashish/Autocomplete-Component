@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { SingleWordOption } from "../../types/autocomplete";
 import "./index.css";
 import HighlightWord from "../HighlightWord";
@@ -10,6 +10,8 @@ type DropdownProps = {
   show: boolean;
   matchingPrefix: string;
   isLoading: boolean;
+  isError: boolean;
+  id: string;
 };
 
 const Dropdown: React.FC<DropdownProps> = ({
@@ -19,8 +21,11 @@ const Dropdown: React.FC<DropdownProps> = ({
   show,
   matchingPrefix,
   isLoading,
+  isError,
+  id,
 }) => {
   const [focusedIndex, setFocusedIndex] = useState<number>(-1);
+  const optionRefs = useRef<(HTMLDivElement | null)[]>([]); // Array of refs for each option
 
   if (!show) return null;
   const handleOptionSelect = (e: React.MouseEvent<HTMLElement>) => {
@@ -35,10 +40,15 @@ const Dropdown: React.FC<DropdownProps> = ({
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
-    if (e.key === "Tab") {
+    if (e.key === "ArrowDown") {
       e.preventDefault();
       setFocusedIndex((prevIndex) =>
         prevIndex === options.length - 1 ? 0 : prevIndex + 1
+      );
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      setFocusedIndex((prevIndex) =>
+        prevIndex <= 0 ? options.length - 1 : prevIndex - 1
       );
     } else if (e.key === "Enter" && focusedIndex >= 0) {
       onSelect(options[focusedIndex]);
@@ -49,6 +59,15 @@ const Dropdown: React.FC<DropdownProps> = ({
     setFocusedIndex(index);
   };
 
+  useEffect(() => {
+    if (focusedIndex >= 0 && optionRefs.current[focusedIndex]) {
+      optionRefs.current[focusedIndex]?.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+      });
+    }
+  }, [focusedIndex]);
+
   const renderOptions = () => {
     return (
       <>
@@ -57,6 +76,7 @@ const Dropdown: React.FC<DropdownProps> = ({
             <div
               key={option.id}
               id={option.id}
+              ref={(el) => (optionRefs.current[index] = el)} // Assign ref to each option
               className={`suggestion ${
                 selectedOption && selectedOption.id === option.id
                   ? "selected"
@@ -65,6 +85,8 @@ const Dropdown: React.FC<DropdownProps> = ({
               tabIndex={0}
               onMouseEnter={() => handleMouseEnter(index)}
               onClick={handleOptionSelect}
+              role="option"
+              aria-selected={selectedOption && selectedOption.id === option.id}
             >
               <HighlightWord
                 text={option.text}
@@ -85,14 +107,28 @@ const Dropdown: React.FC<DropdownProps> = ({
     return <div className="loading">Loading</div>;
   };
 
+  const renderError = () => {
+    return <div className="error">Error Occurred</div>;
+  };
+
   const renderCOmponentBasedOnState = () => {
+    if (isError) return renderError();
     if (isLoading) return renderLoading();
     if (options.length === 0) return renderEmptyState();
     return renderOptions();
   };
 
   return (
-    <div className="dropdownContainer" onKeyDown={handleKeyDown} tabIndex={-1}>
+    <div
+      id={id}
+      className="dropdownContainer"
+      onKeyDown={handleKeyDown}
+      tabIndex={-1}
+      role="listbox"
+      aria-activedescendant={
+        focusedIndex >= 0 ? options[focusedIndex]?.id : undefined
+      }
+    >
       {renderCOmponentBasedOnState()}
     </div>
   );
