@@ -1,4 +1,10 @@
+.dropdownWrapper {
+  position: relative;
+  width: 100%;
+}
+
 .dropdownContainer {
+  position: absolute;
   width: 100%;
   border: 1px solid #ccc;
   max-height: 400px;
@@ -16,7 +22,9 @@
   cursor: pointer;
 }
 
-.no-suggestions .loading .error {
+.no-suggestions,
+.loading,
+.error {
   width: 100%;
   padding: 10px;
   text-align: center;

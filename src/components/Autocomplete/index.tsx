@@ -1,4 +1,4 @@
-import React, { RefObject, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import TextInput from "../TextInput";
 import { SingleWordOption } from "../../types/autocomplete";
 import "./index.css";
@@ -12,7 +12,7 @@ export interface AutoCompleteProps {
 }
 
 const Autocomplete: React.FC<AutoCompleteProps> = ({ onSelect }) => {
-  const containerRef = useRef<HTMLElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const [matchingPrefix, setMatchingPrefix] = useState<string>("");
   const [isInputFocused, setIsInputFocused] = useState<boolean>(true);
   const debouncedSearchTerm = useDebounce(matchingPrefix, 300);
@@ -27,6 +27,10 @@ const Autocomplete: React.FC<AutoCompleteProps> = ({ onSelect }) => {
 
   const handleInputFocus = () => {
     setIsInputFocused(true);
+  };
+
+  const handleEscape = () => {
+    setIsInputFocused(false);
   };
 
   useClickOutside(containerRef, () => setIsInputFocused(false));
@@ -61,9 +65,11 @@ const Autocomplete: React.FC<AutoCompleteProps> = ({ onSelect }) => {
         aria-controls="autocomplete-dropdown"
         aria-autocomplete="list"
       />
-      <div role="alert" aria-live="polite" className="error">
-        Error: {error?.message}
-      </div>{" "}
+      {error && (
+        <div role="alert" aria-live="polite" className="error">
+          Error: {error.message}
+        </div>
+      )}
       <Dropdown
         id="autocomplete-dropdown"
         options={suggestions || []}
@@ -73,6 +79,7 @@ const Autocomplete: React.FC<AutoCompleteProps> = ({ onSelect }) => {
         matchingPrefix={matchingPrefix}
         isLoading={loading}
         isError={error !== null}
+        onEscape={handleEscape}
       />
     </div>
   );

@@ -12,6 +12,7 @@ type DropdownProps = {
   isLoading: boolean;
   isError: boolean;
   id: string;
+  onEscape?: () => void;
 };
 
 const Dropdown: React.FC<DropdownProps> = ({
@@ -23,10 +24,16 @@ const Dropdown: React.FC<DropdownProps> = ({
   isLoading,
   isError,
   id,
+  onEscape,
 }) => {
   const [focusedIndex, setFocusedIndex] = useState<number>(-1);
   const optionRefs = useRef<(HTMLDivElement | null)[]>([]);
   // Array of refs for each option
+
+  // reset to -1 on options change
+  useEffect(() => {
+    setFocusedIndex(-1);
+  }, [options]);
 
   useEffect(() => {
     if (focusedIndex >= 0 && optionRefs.current[focusedIndex]) {
@@ -37,11 +44,11 @@ const Dropdown: React.FC<DropdownProps> = ({
     }
   }, [focusedIndex]);
 
-  const handleOptionSelect = (e: React.MouseEvent<HTMLElement>) => {
-    const target = e.target as HTMLElement;
-    const selectedId = target.id;
-    if (selectedId) {
-      const selectedOption = options.find((option) => option.id === selectedId);
+  const handleOptionSelect = (selectedValue: SingleWordOption) => {
+    if (selectedValue) {
+      const selectedOption = options.find(
+        (option) => option.id === selectedValue.id
+      );
       if (selectedOption) {
         onSelect(selectedOption);
       }
@@ -61,6 +68,9 @@ const Dropdown: React.FC<DropdownProps> = ({
       );
     } else if (e.key === "Enter" && focusedIndex >= 0) {
       onSelect(options[focusedIndex]);
+    } else if (e.key === "Escape") {
+      e.preventDefault();
+      onEscape?.();
     }
   };
 
@@ -75,7 +85,7 @@ const Dropdown: React.FC<DropdownProps> = ({
           return (
             <div
               key={option.id}
-              id={option.id}
+              id={`option-${option.id}`}
               data-testid={option.id}
               ref={(el) => (optionRefs.current[index] = el)} // Assign ref to each option
               className={`suggestion ${
@@ -85,9 +95,9 @@ const Dropdown: React.FC<DropdownProps> = ({
               } ${focusedIndex === index ? "focused" : ""}`}
               tabIndex={0}
               onMouseEnter={() => handleMouseEnter(index)}
-              onClick={handleOptionSelect}
+              onClick={() => handleOptionSelect(option)}
               role="option"
-              aria-selected={selectedOption && selectedOption.id === option.id}
+              aria-selected={selectedOption?.id === option.id}
             >
               <HighlightWord
                 text={option.text}
@@ -112,7 +122,7 @@ const Dropdown: React.FC<DropdownProps> = ({
     return <div className="error">Error Occurred</div>;
   };
 
-  const renderCOmponentBasedOnState = () => {
+  const renderComponentBasedOnState = () => {
     if (isError) return renderError();
     if (isLoading) return renderLoading();
     if (options.length === 0) return renderEmptyState();
@@ -122,17 +132,18 @@ const Dropdown: React.FC<DropdownProps> = ({
   if (!show) return null;
 
   return (
-    <div
-      id={id}
-      className="dropdownContainer"
-      onKeyDown={handleKeyDown}
-      tabIndex={-1}
-      role="listbox"
-      aria-activedescendant={
-        focusedIndex >= 0 ? options[focusedIndex]?.id : undefined
-      }
-    >
-      {renderCOmponentBasedOnState()}
+    <div className="dropdownWrapper">
+      <div
+        id={id}
+        className="dropdownContainer"
+        onKeyDown={handleKeyDown}
+        role="listbox"
+        aria-activedescendant={
+          focusedIndex >= 0 ? options[focusedIndex]?.id : undefined
+        }
+      >
+        {renderComponentBasedOnState()}
+      </div>
     </div>
   );
 };

@@ -4,17 +4,31 @@ type HighlightWordProps = {
   text: string;
   matchingPrefix: string;
 };
+
+const escapeRegex = (str: string) =>
+  str.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+
 const HighlightWord: React.FC<HighlightWordProps> = ({
   text,
   matchingPrefix,
 }) => {
-  if (!matchingPrefix) return text;
-  const regex = new RegExp(`(${matchingPrefix})`, "i");
-  //   const regex = new RegExp(`\\b(${matchingPrefix})`, "i"); // Match only at the start of a word
+  if (!text) return null;
+  if (!matchingPrefix) return <>{text}</>;
+
+  const safePrefix = escapeRegex(matchingPrefix);
+  const regex = new RegExp(`(${safePrefix})`, "i");
   const parts = text.split(regex);
 
-  return parts.map((part, i) =>
-    regex.test(part) ? <mark key={i}>{part}</mark> : <span key={i}>{part}</span>
+  return (
+    <>
+      {parts.map((part, i) =>
+        part.toLowerCase() === matchingPrefix.toLowerCase() ? (
+          <mark key={i}>{part}</mark>
+        ) : (
+          <React.Fragment key={i}>{part}</React.Fragment>
+        )
+      )}
+    </>
   );
 };
 

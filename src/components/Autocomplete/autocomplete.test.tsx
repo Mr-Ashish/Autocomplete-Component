@@ -1,5 +1,10 @@
 import React from "react";
-import { render, fireEvent, waitFor } from "@testing-library/react";
+import {
+  render,
+  fireEvent,
+  waitFor,
+  getByTestId,
+} from "@testing-library/react";
 import Autocomplete from "./index";
 import { useAutoCompleteSuggestions } from "../../hooks/useAutoCompleteSuggestions";
 
@@ -100,8 +105,8 @@ describe("Autocomplete Component", () => {
       error: null,
     });
 
-    const { getByText } = render(<Autocomplete onSelect={mockOnSelect} />);
-    const option = getByText("Option 2");
+    const { getByTestId } = render(<Autocomplete onSelect={mockOnSelect} />);
+    const option = getByTestId("option_2");
 
     fireEvent.click(option);
 

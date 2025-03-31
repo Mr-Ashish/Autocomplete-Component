@@ -7,6 +7,10 @@ interface TextInputProps {
   value: string;
   onFocus?: (e: React.FocusEvent<HTMLInputElement>) => void;
   className?: string;
+  ariaLabel?: string;
+  id?: string;
+  name?: string;
+  onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
 }
 
 const TextInput: React.FC<TextInputProps> = ({
@@ -15,22 +19,25 @@ const TextInput: React.FC<TextInputProps> = ({
   value,
   onFocus,
   className,
+  ariaLabel,
+  id,
+  name,
 }) => {
-  const handleInputChangeDebounced = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onChange(e.target.value);
   };
 
   return (
     <input
-      className={`textInput ${className || ""}`}
+      className={`textInput${className ? ` ${className}` : ""}`}
       type="text"
       value={value}
-      onChange={handleInputChangeDebounced}
+      onChange={handleInputChange}
       placeholder={placeholder}
       onFocus={onFocus}
-      aria-label={placeholder}
+      aria-label={ariaLabel || placeholder}
+      id={id}
+      name={name}
     />
   );
 };
