@@ -6,7 +6,6 @@ interface TextInputProps {
   onChange: (e: string) => void;
   value: string;
   onFocus?: (e: React.FocusEvent<HTMLInputElement>) => void;
-  onBlur?: () => void;
   className?: string;
 }
 
@@ -15,7 +14,6 @@ const TextInput: React.FC<TextInputProps> = ({
   placeholder = "Start typing...",
   value,
   onFocus,
-  onBlur,
   className,
 }) => {
   const handleInputChangeDebounced = (
@@ -32,7 +30,6 @@ const TextInput: React.FC<TextInputProps> = ({
       onChange={handleInputChangeDebounced}
       placeholder={placeholder}
       onFocus={onFocus}
-      onBlur={onBlur}
       aria-label={placeholder}
     />
   );

@@ -7,7 +7,7 @@ type AutoCompleteError = {
   error: unknown;
 };
 
-export const getAutoCompleteSuggestions = (value: string) => {
+export const useAutoCompleteSuggestions = (value: string) => {
   const [data, setData] = useState<SingleWordOption[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<AutoCompleteError | null>(null);

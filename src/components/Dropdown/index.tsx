@@ -25,9 +25,18 @@ const Dropdown: React.FC<DropdownProps> = ({
   id,
 }) => {
   const [focusedIndex, setFocusedIndex] = useState<number>(-1);
-  const optionRefs = useRef<(HTMLDivElement | null)[]>([]); // Array of refs for each option
+  const optionRefs = useRef<(HTMLDivElement | null)[]>([]);
+  // Array of refs for each option
 
-  if (!show) return null;
+  useEffect(() => {
+    if (focusedIndex >= 0 && optionRefs.current[focusedIndex]) {
+      optionRefs.current[focusedIndex].scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+      });
+    }
+  }, [focusedIndex]);
+
   const handleOptionSelect = (e: React.MouseEvent<HTMLElement>) => {
     const target = e.target as HTMLElement;
     const selectedId = target.id;
@@ -58,15 +67,6 @@ const Dropdown: React.FC<DropdownProps> = ({
   const handleMouseEnter = (index: number) => {
     setFocusedIndex(index);
   };
-
-  useEffect(() => {
-    if (focusedIndex >= 0 && optionRefs.current[focusedIndex]) {
-      optionRefs.current[focusedIndex].scrollIntoView({
-        behavior: "smooth",
-        block: "nearest",
-      });
-    }
-  }, [focusedIndex]);
 
   const renderOptions = () => {
     return (
@@ -118,6 +118,8 @@ const Dropdown: React.FC<DropdownProps> = ({
     if (options.length === 0) return renderEmptyState();
     return renderOptions();
   };
+
+  if (!show) return null;
 
   return (
     <div

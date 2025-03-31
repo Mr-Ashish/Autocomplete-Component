@@ -1,11 +1,10 @@
 import React from "react";
 import { render, fireEvent, waitFor } from "@testing-library/react";
 import Autocomplete from "./index";
-import { getAutoCompleteSuggestions } from "../../hooks/getAutoCompleteSuggestions";
+import { useAutoCompleteSuggestions } from "../../hooks/useAutoCompleteSuggestions";
 
-// Mock the getAutoCompleteSuggestions hook
-jest.mock("../../hooks/getAutoCompleteSuggestions", () => ({
-  getAutoCompleteSuggestions: jest.fn(),
+jest.mock("../../hooks/useAutoCompleteSuggestions", () => ({
+  useAutoCompleteSuggestions: jest.fn(),
 }));
 
 describe("Autocomplete Component", () => {
@@ -21,7 +20,7 @@ describe("Autocomplete Component", () => {
   });
 
   it("renders without crashing", () => {
-    (getAutoCompleteSuggestions as jest.Mock).mockReturnValue({
+    (useAutoCompleteSuggestions as jest.Mock).mockReturnValue({
       data: [],
       loading: false,
       error: null,
@@ -32,7 +31,7 @@ describe("Autocomplete Component", () => {
   });
 
   it("renders the TextInput component with correct props", () => {
-    (getAutoCompleteSuggestions as jest.Mock).mockReturnValue({
+    (useAutoCompleteSuggestions as jest.Mock).mockReturnValue({
       data: [],
       loading: false,
       error: null,
@@ -47,7 +46,7 @@ describe("Autocomplete Component", () => {
   });
 
   it("renders the Dropdown component when shouldShowSuggestions is true", () => {
-    (getAutoCompleteSuggestions as jest.Mock).mockReturnValue({
+    (useAutoCompleteSuggestions as jest.Mock).mockReturnValue({
       data: mockSuggestions,
       loading: false,
       error: null,
@@ -58,7 +57,7 @@ describe("Autocomplete Component", () => {
   });
 
   it("updates matchingPrefix when typing in TextInput", () => {
-    (getAutoCompleteSuggestions as jest.Mock).mockReturnValue({
+    (useAutoCompleteSuggestions as jest.Mock).mockReturnValue({
       data: [],
       loading: false,
       error: null,
@@ -74,7 +73,7 @@ describe("Autocomplete Component", () => {
   });
 
   it("displays suggestions in Dropdown based on matchingPrefix", async () => {
-    (getAutoCompleteSuggestions as jest.Mock).mockReturnValue({
+    (useAutoCompleteSuggestions as jest.Mock).mockReturnValue({
       data: mockSuggestions,
       loading: false,
       error: null,
@@ -95,7 +94,7 @@ describe("Autocomplete Component", () => {
   });
 
   it("calls handleOptionSelect when an option is clicked", async () => {
-    (getAutoCompleteSuggestions as jest.Mock).mockReturnValue({
+    (useAutoCompleteSuggestions as jest.Mock).mockReturnValue({
       data: mockSuggestions,
       loading: false,
       error: null,
@@ -115,7 +114,7 @@ describe("Autocomplete Component", () => {
   });
 
   it("displays 'Loading' when loading is true", () => {
-    (getAutoCompleteSuggestions as jest.Mock).mockReturnValue({
+    (useAutoCompleteSuggestions as jest.Mock).mockReturnValue({
       data: [],
       loading: true,
       error: null,
@@ -126,7 +125,7 @@ describe("Autocomplete Component", () => {
   });
 
   it("displays an error message when error is not null", () => {
-    (getAutoCompleteSuggestions as jest.Mock).mockReturnValue({
+    (useAutoCompleteSuggestions as jest.Mock).mockReturnValue({
       data: [],
       loading: false,
       error: { message: "Something went wrong" },
@@ -137,7 +136,7 @@ describe("Autocomplete Component", () => {
   });
 
   it("displays 'No suggestions available' when no suggestions are returned", async () => {
-    (getAutoCompleteSuggestions as jest.Mock).mockReturnValue({
+    (useAutoCompleteSuggestions as jest.Mock).mockReturnValue({
       data: [],
       loading: false,
       error: null,
